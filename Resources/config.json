@@ -5,6 +5,14 @@
   "DefaultSendIp": "127.0.0.1",
   "DefaultSendPort": 9000,
 
+  "EnabledLogs": {
+    "Info": true,
+    "Warning": true,
+    "Error": true,
+    "Log": true,
+    "Debug": true
+  },
+
   "GlobalCommands": false,
 
   "Listeners": [

@@ -9,6 +9,8 @@ namespace SimpleOscBot.Services
     {
         public static void Log(LogMessage message)
         {
+            if (!LogLevelAllowed(message.Severity)) return;
+
             var bufferColor = Console.ForegroundColor;
 
             Console.ForegroundColor = GetLogColor(message.Severity);
@@ -39,6 +41,16 @@ namespace SimpleOscBot.Services
             LogSeverity.Info => ConsoleColor.White,
             LogSeverity.Debug => ConsoleColor.DarkBlue,
             _ => ConsoleColor.White
+        };
+
+        private static bool LogLevelAllowed(LogSeverity severity) => severity switch
+        {
+            LogSeverity.Error => Config.Data.EnabledLogs.Error,
+            LogSeverity.Warning => Config.Data.EnabledLogs.Warning,
+            LogSeverity.Info => Config.Data.EnabledLogs.Info,
+            LogSeverity.Verbose => Config.Data.EnabledLogs.Log,
+            LogSeverity.Debug => Config.Data.EnabledLogs.Debug,
+            _ => true
         };
     }
 }

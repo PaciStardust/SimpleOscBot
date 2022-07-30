@@ -22,6 +22,8 @@ namespace SimpleOscBot
             public bool GlobalCommands { get; init; }
 
             public List<ListenerModel> Listeners { get; init; }
+
+            public LoggingModel EnabledLogs { get; init; }
         }
 
         public class ListenerModel
@@ -30,6 +32,15 @@ namespace SimpleOscBot
             public int Port { get; init; }
             public string Type { get; init; }
             public List<object> Data { get; init; }
+        }
+
+        public class LoggingModel
+        {
+            public bool Info { get; init; }
+            public bool Warning { get; init; }
+            public bool Error { get; init; }
+            public bool Log { get; init; }
+            public bool Debug { get; init; }
         }
 
         public static string ConfigPath = Path.GetFullPath(@"../../../Resources/config.json");
