@@ -1,0 +1,23 @@
+﻿{
+  "BotToken": "",
+  "GuildId": -1,
+
+  "DefaultSendIp": "127.0.0.1",
+  "DefaultSendPort": 9000,
+
+  "GlobalCommands": false,
+
+  "Listeners": [
+    {
+      "Name": "Router",
+      "Port": 9010,
+      "Type": "SimpleOscBot.OSCControl.ListenerRelayExample",
+      "Data": [ 9000, 9020 ]
+    },
+    {
+      "Name": "Debugger",
+      "Port": 9020,
+      "Type": "SimpleOscBot.OSCControl.ListenerDebugExample"
+    }
+  ]
+}
