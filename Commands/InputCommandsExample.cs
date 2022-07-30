@@ -84,8 +84,24 @@ namespace SimpleOscBot.Commands
 
             bool success = SendAction(address, value);
 
-            await RespondEmbed(success ? "Executed \"{address}\"" : "There was an error in execution\nPlease check logs");
+            await RespondEmbed(success ? $"Executed \"{address}\"" : "There was an error in execution\nPlease check logs");
         }
 
+        [SlashCommand("vrc-emote", "play an emote for x time")]
+        public async Task ControlEmote([MinValue(0), MaxValue(99)] int emote, [MinValue(0), MaxValue(5000)] int time)
+        {
+            var address = "/avatar/parameters/VRCEmote";
+            await RespondEmbed($"Doing emote {emote} for {time}ms!");
+            await SendActionTimed(address, time, emote);
+        }
+
+        //This only works when a parameter called PlaySpeed exists
+        [SlashCommand("vrc-speed", "set emote speed")]
+        public async Task ControlSpeed([MinValue(0), MaxValue(1)] float speed)
+        {
+            var address = "/avatar/parameters/PlaySpeed";
+            SendAction(address, speed);
+            await RespondEmbed($"Setting emote speed to {speed}");
+        }
     }
 }

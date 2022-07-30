@@ -49,6 +49,19 @@ namespace SimpleOscBot.OSCControl
         /// <returns>True on success</returns>
         public static bool SendCustom(string address, string ip, int port, params object[] args)
         {
+            //fixing an issue with sending bools as first arg, thanks sharposc
+            if(args == null || args.Length == 0)
+            {
+                Logger.Warning($"Attempted to send a package to {ip}:{port} ({address}), but the contents were empty!", "OSCSender");
+                return false;
+            }
+
+            if (args[0].GetType() == typeof(bool))
+            {
+                Logger.Log($"Boolean detected as first agrument sent to {ip}:{port} ({address}), replacing with integer to fix SharpOsc bug", "OSCSender");
+                args[0] = (bool)args[0] ? 1 : 0;
+            }
+
             var message = new OscMessage(address, args);
             var sender = new UDPSender(ip, port);
             try

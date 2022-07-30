@@ -33,6 +33,13 @@ namespace SimpleOscBot.OSCControl
             void callback(OscPacket packet)
             {
                 var message = (OscMessage)packet;
+
+                if (message == null)
+                {
+                    Logger.Warning("Received an empty packet, this appears to happen when sending bool values, if that is the case please switch to 0 and 1", Name);
+                    return;
+                }
+
                 Logger.Log($"Packet has been received on \"{name}\" port {port} ({message.Address})", Name);
                 HandleData(message.Address, message.Arguments.ToArray());
             }
