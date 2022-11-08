@@ -1,4 +1,4 @@
-﻿using SharpOSC;
+﻿using CoreOSC;
 using SimpleOscBot.Services;
 
 namespace SimpleOscBot.OSCControl
@@ -8,8 +8,8 @@ namespace SimpleOscBot.OSCControl
     /// </summary>
     public abstract class OscListenerBase
     {
-        public int Port { get; private set; }
-        public string Name { get; private set; }
+        public int Port { get; private set; } = -1;
+        public string Name { get; private set; } = string.Empty;
         private bool _started = false;
 
         public OscListenerBase() {}

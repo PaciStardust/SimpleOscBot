@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Reflection;
 using System.Text;
 
 namespace SimpleOscBot
@@ -13,43 +14,59 @@ namespace SimpleOscBot
         /// </summary>
         public class ConfigModel
         {
-            public string BotToken { get; init; }
-            public ulong GuildId { get; init; }
+            public string BotToken { get; init; } = string.Empty;
+            public ulong GuildId { get; init; } = 0;
 
-            public string DefaultSendIp { get; init; }
-            public int DefaultSendPort { get; init; }
+            public string DefaultSendIp { get; init; } = string.Empty;
+            public int DefaultSendPort { get; init; } = -1;
 
-            public bool GlobalCommands { get; init; }
+            public bool GlobalCommands { get; init; } = false;
 
-            public List<ListenerModel> Listeners { get; init; }
+            public List<ListenerModel> Listeners { get; init; } = new();
 
-            public LoggingModel EnabledLogs { get; init; }
+            public LoggingModel EnabledLogs { get; init; } = new();
         }
 
         public class ListenerModel
         {
-            public string Name { get; init; }
-            public int Port { get; init; }
-            public string Type { get; init; }
-            public List<object> Data { get; init; }
+            public string Name { get; init; } = string.Empty;
+            public int Port { get; init; } = -1;
+            public string Type { get; init; } = string.Empty;
+            public List<object> Data { get; init; } = new();
         }
 
         public class LoggingModel
         {
-            public bool Info { get; init; }
-            public bool Warning { get; init; }
-            public bool Error { get; init; }
-            public bool Log { get; init; }
-            public bool Debug { get; init; }
+            public bool Info { get; init; } = true;
+            public bool Warning { get; init; } = true;
+            public bool Error { get; init; } = true;
+            public bool Log { get; init; } = true;
+            public bool Debug { get; init; } = true;
         }
 
-        public static string ConfigPath = Path.GetFullPath(@"../../../Resources/config.json");
+        public static string ConfigPath;
+        public static string ResourcePath;
         public static ConfigModel Data { get; private set; }
 
         static Config()
         {
-            string configData = File.ReadAllText(ConfigPath, Encoding.UTF8);
-            Data = JsonConvert.DeserializeObject<ConfigModel>(configData);
+            var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? Directory.GetCurrentDirectory();
+
+            ResourcePath = Path.GetFullPath(Path.Combine(assemblyDirectory, "config"));
+            ConfigPath = Path.GetFullPath(Path.Combine(ResourcePath, "config.json"));
+
+            try
+            {
+                if (!Directory.Exists(ResourcePath))
+                    Directory.CreateDirectory(ResourcePath);
+
+                string configData = File.ReadAllText(ConfigPath, Encoding.UTF8);
+                Data = JsonConvert.DeserializeObject<ConfigModel>(configData) ?? new();
+            }
+            catch
+            {
+                Data = new();
+            }
         }
     }
 }

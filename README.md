@@ -7,7 +7,7 @@ Join the discord here: https://discord.gg/pxwGHvfcxs
 
 The bot comes with the following features:
 - Full [Discord.NET](https://discordnet.dev/) *(Slash commands, Interactions, etc)*
-- Sending any OSC data in an easy way *(Thanks to [OSCSharp](https://github.com/ValdemarOrn/SharpOSC))*
+- Sending any OSC data in an easy way *(Thanks to *[CoreOSC](https://github.com/PaciStardust/CoreOSC-UTF8))*
 - An OSC Listener-framework that allows for easy listening on any port and custom handling
 - Logging functions for easy logging
 

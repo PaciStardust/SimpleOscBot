@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>annotations</Nullable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,13 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="SharpOSC">
-      <HintPath>Resources\SharpOSC.dll</HintPath>
+    <Reference Include="CoreOSC">
+      <HintPath>Resources\CoreOsc\CoreOSC.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\config.json">
+    <None Update="Resources\sampleconfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

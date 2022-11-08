@@ -1,19 +1,18 @@
-SharpOSC - OSC Library for .NET 3.5
+CoreOSC - OSC Library for .NET Standard 2.0
 ===================================
 
 
-SharpOSC is a small library designed to make interacting with Open Sound Control easy (OSC). It provides the following features:
+CoreOSC is a small library designed to make interacting with Open Sound Control easy (OSC). It provides the following features:
 
 + Produce an OSC Packet (messages and bundles) from .NET values.
 + Translate an OSC message (consisting of a sequence of bytes) into a .NET object.
 + Transmit OSC packets via UDP.
 + Receive OSC packets via UDP.
 
-Download
+History
 --------
 
-If you don't want to build SharpOSC from source you can download compiled versions from [Here](https://github.com/valdiorn/SharpOSC/tree/master/Binaries)
-
+CoreOSC is forked and converted from [SharpOSC](https://github.com/ValdemarOrn/SharpOSC) made by [ValdermarOrn](https://github.com/ValdemarOrn)
 
 Supported Types
 ---------------
@@ -25,12 +24,12 @@ Supported Types
 * s	- OSC-string (System.String)
 * b	- OSC-blob (System.Byte[])
 * h	- 64 bit big-endian two's complement integer (System.Int64)
-* t	- OSC-timetag (System.UInt64 / SharpOSC.Timetag)
+* t	- OSC-timetag (System.UInt64 / CoreOSC.Timetag)
 * d	- 64 bit ("double") IEEE 754 floating point number (System.Double)
-* S	- Alternate type represented as an OSC-string (for example, for systems that differentiate "symbols" from "strings") (SharpOSC.Symbol)
+* S	- Alternate type represented as an OSC-string (for example, for systems that differentiate "symbols" from "strings") (CoreOSC.Symbol)
 * c	- an ascii character, sent as 32 bits (System.Char)
-* r	- 32 bit RGBA color (SharpOSC.RGBA)
-* m	- 4 byte MIDI message. Bytes from MSB to LSB are: port id, status byte, data1, data2 (SharpOSC.Midi)
+* r	- 32 bit RGBA color (CoreOSC.RGBA)
+* m	- 4 byte MIDI message. Bytes from MSB to LSB are: port id, status byte, data1, data2 (CoreOSC.Midi)
 * T	- True. No bytes are allocated in the argument data. (System.Boolean)
 * F	- False. No bytes are allocated in the argument data. (System.Boolean)
 * N	- Nil. No bytes are allocated in the argument data. (null)
@@ -45,14 +44,14 @@ Supported Types
 License
 -------
 
-SharpOSC is licensed under the MIT license. 
+CoreOSC is licensed under the MIT license. 
 
 See License.txt
 
 Using The Library
 -----------------
 
-To use the library add a reference to SharpOSC.dll in your .NET project. SharpOSC should now be available to use in your code under that namespace "SharpOSC". 
+To use the library add a reference to CoreOSC.dll in your .NET project. CoreOSC should now be available to use in your code under that namespace "CoreOSC". 
 
 Example: Sending a message
 --------------------------
@@ -61,8 +60,8 @@ Example: Sending a message
 	{
 		static void Main(string[] args)
 		{
-			var message = new SharpOSC.OscMessage("/test/1", 23, 42.01f, "hello world");
-			var sender = new SharpOSC.UDPSender("127.0.0.1", 55555);
+			var message = new CoreOSC.OscMessage("/test/1", 23, 42.01f, "hello world");
+			var sender = new CoreOSC.UDPSender("127.0.0.1", 55555);
 			sender.Send(message);
 		}
 	}
@@ -87,7 +86,7 @@ Example: Receiving a Message (Synchronous)
 		}
 	}
 
-This shows a very simple way of waiting for incoming messages. The listener.Receive() method will check if the listener has received any new messages since it was last called. If there is a new message that has not been returned it will assign messageReceived to point to that message. If no message has been received since the last call to Receive it will return null.
+This shows a very simple way of waiting for incoming messages. The listener.Receive() method will check if the listener has received any new messages since it was last called. It will poll for a message every millisecond. If there is a new message that has not been returned it will assign messageReceived to point to that message. If no message has been received since the last call to Receive it will return null.
 
 Example: Receiving a Message (Asynchronous)
 -------------------------------------------
@@ -106,13 +105,36 @@ Example: Receiving a Message (Asynchronous)
 			var listener = new UDPListener(55555, callback);
 
 			Console.WriteLine("Press enter to stop");
+			Console.ReadLine();
 			listener.Close();
 		}
 	}
 
 By giving UDPListener a callback you don't have to periodically check for incoming messages. The listener will simply invoke the callback whenever a message is received. You are free to implement any code you need inside the callback.
 
-Contribute
-----------
+Example: UDPDuplex (Asynchronous)
+-------------------------------------------
 
-I would love to get some feedback. Use the Issue tracker on Github to send bug reports and feature requests, or just if you have something to say about the project. If you have code changes that you would like to have integrated into the main repository, send me a pull request or a patch. I will try my best to integrate them and make sure SharpOSC improves and matures.
+	class Program
+	{
+		public void Main(string[] args)
+		{
+			// The cabllback function
+			HandleOscPacket callback = delegate(OscPacket packet)
+			{
+				var messageReceived = (OscMessage)packet;
+				Console.WriteLine("Received a message!");
+			};
+
+			var duplex = new UDPDuplex("remotehost.com",4444,55555, callback);
+
+			var message = new CoreOSC.OscMessage("/xremote");
+			duplex.Send(message);
+
+			Console.WriteLine("Press enter to stop");
+			Console.ReadLine();
+			duplex.Close();
+		}
+	}
+
+UDPDuplex works like UDPListener for recieving messages and work like UDPSender for sending messages. in this case the remote machine is remotehost.com listening on port 4444 and this script listens and sends messages from port 5555.

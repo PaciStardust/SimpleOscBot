@@ -1,4 +1,4 @@
-﻿using SharpOSC;
+﻿using CoreOSC;
 using SimpleOscBot.Services;
 
 namespace SimpleOscBot.OSCControl
