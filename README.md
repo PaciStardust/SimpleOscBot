@@ -3,6 +3,9 @@
 SimpleOscBot is a free to use *(as long as you give credit)* template for Discord Bots with OSC integration.
 Setting it up takes only a few minutes.
 
+# Warning
+This project is outdated, if you need me to update it, let me know and ill do it if demand is high enough
+
 Join the discord here: https://discord.gg/pxwGHvfcxs
 
 The bot comes with the following features:
